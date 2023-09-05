@@ -1,0 +1,21 @@
+ steps:
+ - 
+   name: 'gcr.io/cloud-builders/docker'
+   args: ['build', '-t',
+   'gcr.io/steadfast-rex-342212/test-flask/docker-flask:latest', '.']
+ - 
+   name: 'gcr.io/cloud-builders/docker'
+   args: ['push', 'gcr.io/steadfast-rex-342212/test-flask/docker-flask:latest']
+   
+   # Deploy container image to Cloud Run
+ - 
+   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+   entrypoint: gcloud
+   args: ['run', 'deploy', 'test-flask', 
+   '--image', 'gcr.io/steadfast-rex-342212/test-flask/docker-flask:latest', 
+   '--region', 'asia-southeast1',
+   '--platform', 'managed',
+   '--port','5000',
+   '--allow-unauthenticated']
+ images:
+ - gcr.io/steadfast-rex-342212/test-flask/docker-flask:latest
